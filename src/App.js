@@ -1,28 +1,48 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component, Fragment } from 'react'
+import ImagePicker from 'filestack-react'
+
+import './App.css'
 
 class App extends Component {
+  state = {
+    image: null
+  }
+
+  componentDidMount() {
+    const image = localStorage.getItem('item')
+
+    if (image) {
+      this.setState({ image })
+    }
+  }
+
+  handleFileUploaded = result => {
+    const image = result.filesUploaded[0].url
+
+    localStorage.setItem('image', image)
+
+    this.setState({ image })
+  }
+
   render() {
+    const { image } = this.state
+
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
+      <Fragment>
+        <ImagePicker
+          apikey={process.env.REACT_APP_FILESTACK_API_KEY}
+          onSuccess={this.handleFileUploaded}
+          render={({ onClick }) => (
+            <button
+              className="image-picker"
+              style={{ backgroundImage: `url("${image}")` }}
+              onClick={onClick}
+            />
+          )}
+        />
+      </Fragment>
+    )
   }
 }
 
-export default App;
+export default App
