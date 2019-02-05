@@ -9,7 +9,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const image = localStorage.getItem('item')
+    const image = localStorage.getItem('image')
 
     if (image) {
       this.setState({ image })
@@ -32,11 +32,11 @@ class App extends Component {
         <ImagePicker
           apikey={process.env.REACT_APP_FILESTACK_API_KEY}
           onSuccess={this.handleFileUploaded}
-          render={({ onClick }) => (
+          render={({ onPick }) => (
             <button
               className="image-picker"
               style={{ backgroundImage: `url("${image}")` }}
-              onClick={onClick}
+              onClick={onPick}
             />
           )}
         />
